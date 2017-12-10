@@ -1,8 +1,8 @@
 package com.example.outofthecave.geburtstagskalender;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,31 +11,55 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class TimelineActivity extends AppCompatActivity {
+import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayTask;
+import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
+
+import java.util.List;
+import java.util.Locale;
+
+public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
+    public static final String EXTRA_BIRTHDAY_TO_ADD = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppDatabase database = AppDatabase.getInstance(this);
+
         setContentView(R.layout.activity_timeline);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthday_list);
-        for (int i = 1; i < 32; ++i) {
-            TextView birthdayLine1 = new TextView(this);
-            birthdayLine1.setText(String.format("%d.01. Someone", i));
-            birthdayList.addView(birthdayLine1);
+        Intent intent = getIntent();
+        Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
+        if (birthdayToAdd != null) {
+            new AsyncAddBirthdayTask(database).execute(birthdayToAdd);
         }
 
+        // TODO Resolve race condition between adding the birthday to the DB and getting all birthdays from the DB to show them.
+        new AsyncGetAllBirthdaysTask(database, this).execute();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final TimelineActivity self = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(self, AddBirthdayActivity.class);
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBirthdayListLoaded(List<Birthday> birthdays) {
+        LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthdayList);
+        for (Birthday birthday : birthdays) {
+            TextView birthdayLine = new TextView(this);
+            birthdayLine.setText(String.format(Locale.ROOT, "%d.%d. %s", birthday.day, birthday.month, birthday.name));
+            birthdayList.addView(birthdayLine);
+        }
     }
 
     @Override
