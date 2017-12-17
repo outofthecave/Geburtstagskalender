@@ -9,11 +9,32 @@ import android.support.annotation.Nullable;
 @Entity(primaryKeys = {"name", "day", "month"})
 public final class Birthday implements Parcelable {
     @NonNull
-    public String name;
-    public int day;
-    public int month;
+    public String name = "";
+    public int day = 0;
+    public int month = 0;
     @Nullable
     public Integer year;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Birthday{");
+        sb.append("name=\"");
+        sb.append(name);
+        sb.append("\",");
+        sb.append("day=");
+        sb.append(day);
+        sb.append(",");
+        sb.append("month=");
+        sb.append(month);
+        if (year != null) {
+            sb.append(",");
+            sb.append("year=");
+            sb.append(year);
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 
     public static final Parcelable.Creator<Birthday> CREATOR = new Parcelable.Creator<Birthday>() {
         @Override
