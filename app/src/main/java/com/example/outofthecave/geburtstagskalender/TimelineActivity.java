@@ -57,7 +57,11 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthdayList);
         for (Birthday birthday : birthdays) {
             TextView birthdayLine = new TextView(this);
-            birthdayLine.setText(String.format(Locale.ROOT, "%d.%d. %s", birthday.day, birthday.month, birthday.name));
+            String yearString = "";
+            if (birthday.year != null) {
+                yearString = birthday.year.toString();
+            }
+            birthdayLine.setText(String.format(Locale.ROOT, "%d.%d.%s %s", birthday.day, birthday.month, yearString, birthday.name));
             birthdayList.addView(birthdayLine);
         }
     }

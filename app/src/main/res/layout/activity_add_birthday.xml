@@ -7,6 +7,7 @@
     tools:context="com.example.outofthecave.geburtstagskalender.AddBirthdayActivity">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,29 +16,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/nameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name:" />
+
             <EditText
                 android:id="@+id/nameTextField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Name" />
+                android:text="" />
 
-            <DatePicker
+            <com.example.outofthecave.geburtstagskalender.ui.MyDatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Switch
+                android:id="@+id/doSaveYear"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="46dp" />
+                android:text="Jahreszahl auch speichern" />
 
             <Button
                 android:id="@+id/addBirthdayButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onAddBirthdayButtonClick"
-                android:text="Button"
-                tools:layout_editor_absoluteX="280dp"
-                tools:layout_editor_absoluteY="447dp" />
+                android:text="Speichern" />
         </LinearLayout>
 
     </ScrollView>
