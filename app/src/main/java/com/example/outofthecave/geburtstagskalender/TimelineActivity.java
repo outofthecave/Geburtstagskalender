@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
 import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayAndGetAllBirthdaysTask;
 import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayTask;
 import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
 
@@ -35,11 +36,10 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         Intent intent = getIntent();
         Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
         if (birthdayToAdd != null) {
-            new AsyncAddBirthdayTask(database).execute(birthdayToAdd);
+            new AsyncAddBirthdayAndGetAllBirthdaysTask(database, this).execute(birthdayToAdd);
+        } else {
+            new AsyncGetAllBirthdaysTask(database, this).execute();
         }
-
-        // TODO Resolve race condition between adding the birthday to the DB and getting all birthdays from the DB to show them.
-        new AsyncGetAllBirthdaysTask(database, this).execute();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final TimelineActivity self = this;

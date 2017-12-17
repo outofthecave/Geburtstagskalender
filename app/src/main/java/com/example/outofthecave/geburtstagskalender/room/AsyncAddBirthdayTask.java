@@ -13,8 +13,15 @@ public final class AsyncAddBirthdayTask extends AsyncTask<Birthday, Void, Void> 
 
     @Override
     protected Void doInBackground(Birthday... birthdays) {
+        return doInBackgroundImpl(birthdays);
+    }
+
+    Void doInBackgroundImpl(Birthday... birthdays) {
         BirthdayDao birthdayDao = database.birthdayDao();
         for (Birthday birthday : birthdays) {
+            if (isCancelled()) {
+                break;
+            }
             birthdayDao.add(birthday);
         }
         return null;

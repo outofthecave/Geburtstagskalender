@@ -17,11 +17,19 @@ public final class AsyncGetAllBirthdaysTask extends AsyncTask<Void, Void, List<B
 
     @Override
     protected List<Birthday> doInBackground(Void... voids) {
+        return doInBackgroundImpl(voids);
+    }
+
+    List<Birthday> doInBackgroundImpl(Void... voids) {
         return database.birthdayDao().getAll();
     }
 
     @Override
     protected void onPostExecute(List<Birthday> birthdays) {
+        onPostExecuteImpl(birthdays);
+    }
+
+    void onPostExecuteImpl(List<Birthday> birthdays) {
         callbacks.onBirthdayListLoaded(birthdays);
     }
 
