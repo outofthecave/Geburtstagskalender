@@ -1,5 +1,8 @@
 package com.example.outofthecave.geburtstagskalender;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -54,6 +57,14 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
                 startActivity(intent);
             }
         });
+
+        // TODO compute time when to schedule notification
+        long triggerTimestamp = System.currentTimeMillis() + 5000;
+        Intent notifierIntent = new Intent(this, BirthdayNotifier.class);
+        PendingIntent pendingNotifierIntent = PendingIntent.getBroadcast(this, 0, notifierIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTimestamp, pendingNotifierIntent);
+        // TODO do the scheduling work again when the reboot is complete
     }
 
     @Override
