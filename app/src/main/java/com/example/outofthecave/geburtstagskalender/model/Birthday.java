@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Objects;
+
 @Entity(primaryKeys = {"name", "day", "month"})
 public final class Birthday implements Parcelable {
     @NonNull
@@ -14,6 +16,28 @@ public final class Birthday implements Parcelable {
     public int month = 0;
     @Nullable
     public Integer year;
+
+    @Override
+    public boolean equals(@Nullable Object that) {
+        if (this == that) {
+            return true;
+        }
+
+        if (that == null || getClass() != that.getClass()) {
+            return false;
+        }
+
+        Birthday birthday = (Birthday) that;
+        return Objects.equals(name, birthday.name)
+                && day == birthday.day
+                && month == birthday.month
+                && Objects.equals(year, birthday.year);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, day, month, year);
+    }
 
     @Override
     public String toString() {
