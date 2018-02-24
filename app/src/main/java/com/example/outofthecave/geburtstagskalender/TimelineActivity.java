@@ -54,6 +54,8 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
                 startActivity(intent);
             }
         });
+
+        BirthdayNotifier.registerNotificationChannel(this);
     }
 
     @Override
