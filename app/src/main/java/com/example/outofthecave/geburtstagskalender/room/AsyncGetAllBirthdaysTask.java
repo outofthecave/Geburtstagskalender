@@ -1,5 +1,6 @@
 package com.example.outofthecave.geburtstagskalender.room;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
@@ -7,10 +8,12 @@ import com.example.outofthecave.geburtstagskalender.model.Birthday;
 import java.util.List;
 
 public final class AsyncGetAllBirthdaysTask extends AsyncTask<Void, Void, List<Birthday>> {
+    private final Context context;
     private final AppDatabase database;
     private final Callbacks callbacks;
 
-    public AsyncGetAllBirthdaysTask(AppDatabase database, Callbacks callbacks) {
+    public AsyncGetAllBirthdaysTask(Context context, AppDatabase database, Callbacks callbacks) {
+        this.context = context;
         this.database = database;
         this.callbacks = callbacks;
     }
@@ -30,10 +33,10 @@ public final class AsyncGetAllBirthdaysTask extends AsyncTask<Void, Void, List<B
     }
 
     void onPostExecuteImpl(List<Birthday> birthdays) {
-        callbacks.onBirthdayListLoaded(birthdays);
+        callbacks.onBirthdayListLoaded(context, birthdays);
     }
 
     public interface Callbacks {
-        void onBirthdayListLoaded(List<Birthday> birthdays);
+        void onBirthdayListLoaded(Context context, List<Birthday> birthdays);
     }
 }

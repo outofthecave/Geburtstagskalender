@@ -1,5 +1,6 @@
 package com.example.outofthecave.geburtstagskalender;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,36 +31,36 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppDatabase database = AppDatabase.getInstance(this);
+        final Context context = this;
 
         setContentView(R.layout.activity_timeline);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        AppDatabase database = AppDatabase.getInstance(context);
         Intent intent = getIntent();
         Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
         if (birthdayToAdd != null) {
-            new AsyncAddBirthdayAndGetAllBirthdaysTask(database, this).execute(birthdayToAdd);
+            new AsyncAddBirthdayAndGetAllBirthdaysTask(context, database, this).execute(birthdayToAdd);
         } else {
-            new AsyncGetAllBirthdaysTask(database, this).execute();
+            new AsyncGetAllBirthdaysTask(context, database, this).execute();
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final TimelineActivity self = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(self, AddBirthdayActivity.class);
+                Intent intent = new Intent(context, AddBirthdayActivity.class);
                 startActivity(intent);
             }
         });
 
-        BirthdayNotifier.registerNotificationChannel(this);
+        BirthdayNotifier.registerNotificationChannel(context);
     }
 
     @Override
-    public void onBirthdayListLoaded(List<Birthday> birthdays) {
+    public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
         LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthdayList);
 
         Calendar now = Calendar.getInstance();
@@ -71,7 +72,7 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         Collections.sort(birthdays, YearlyRecurringBirthdayComparator.forReferenceDate(currentMonth, currentDay));
 
         for (Birthday birthday : birthdays) {
-            TextView birthdayLine = new TextView(this);
+            TextView birthdayLine = new TextView(context);
             String yearString = "";
             if (birthday.year != null) {
                 yearString = birthday.year.toString();
@@ -80,7 +81,7 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
             birthdayList.addView(birthdayLine);
         }
 
-        BirthdayNotificationScheduler.scheduleNotifications(this);
+        BirthdayNotificationScheduler.scheduleNotifications(context,  birthdays);
     }
 
     @Override
