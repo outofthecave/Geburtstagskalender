@@ -40,7 +40,13 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
     }
 
     public static void scheduleNextNotification(Context context, List<Birthday> birthdays) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent notifierIntent = new Intent(context, BirthdayNotifier.class);
+
         if (birthdays.isEmpty()) {
+            PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
+            alarmManager.cancel(pendingNotifierIntent);
+            setAutoSchedulingOnReboot(context, false);
             return;
         }
 
@@ -74,14 +80,16 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
         long triggerTimestamp = calendar.getTimeInMillis();
         Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for epoch time: " + triggerTimestamp);
 
-        Intent notifierIntent = new Intent(context, BirthdayNotifier.class);
         notifierIntent.putParcelableArrayListExtra(BirthdayNotifier.EXTRA_BIRTHDAYS, upcomingBirthdays);
-        PendingIntent pendingNotifierIntent = PendingIntent.getBroadcast(context, 0, notifierIntent, 0);
+        PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTimestamp, pendingNotifierIntent);
 
         setAutoSchedulingOnReboot(context, true);
+    }
+
+    private static PendingIntent getPendingNotifierIntent(Context context, Intent notifierIntent) {
+        return PendingIntent.getBroadcast(context, 0, notifierIntent, 0);
     }
 
     /**
