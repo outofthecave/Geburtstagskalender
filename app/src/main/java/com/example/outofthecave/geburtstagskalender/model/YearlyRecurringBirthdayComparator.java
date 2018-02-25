@@ -1,5 +1,6 @@
 package com.example.outofthecave.geburtstagskalender.model;
 
+import java.util.Calendar;
 import java.util.Comparator;
 
 /**
@@ -14,6 +15,18 @@ public final class YearlyRecurringBirthdayComparator implements Comparator<Birth
     private YearlyRecurringBirthdayComparator(int referenceMonth, int referenceDay) {
         this.referenceMonth = referenceMonth;
         this.referenceDay = referenceDay;
+    }
+
+    /**
+     * Get a {@link YearlyRecurringBirthdayComparator} with today's date as the reference date.
+     *
+     * @return A new {@link YearlyRecurringBirthdayComparator} for today.
+     */
+    public static YearlyRecurringBirthdayComparator forReferenceDateToday() {
+        Calendar now = Calendar.getInstance();
+        int currentMonth = CalendarUtil.getOneBasedMonth(now);
+        int currentDay = now.get(Calendar.DAY_OF_MONTH);
+        return YearlyRecurringBirthdayComparator.forReferenceDate(currentMonth, currentDay);
     }
 
     /**

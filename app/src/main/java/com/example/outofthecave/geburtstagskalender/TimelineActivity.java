@@ -13,14 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.CalendarUtil;
 import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
 import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayAndGetAllBirthdaysTask;
 import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -63,13 +61,9 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
     public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
         LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthdayList);
 
-        Calendar now = Calendar.getInstance();
-        // Ensure the month is one-based.
-        int currentMonth = CalendarUtil.getOneBasedMonth(now);
-        int currentDay = now.get(Calendar.DAY_OF_MONTH);
         // Make a shallow copy so we can sort without changing the parameter.
         birthdays = new ArrayList<>(birthdays);
-        Collections.sort(birthdays, YearlyRecurringBirthdayComparator.forReferenceDate(currentMonth, currentDay));
+        Collections.sort(birthdays, YearlyRecurringBirthdayComparator.forReferenceDateToday());
 
         for (Birthday birthday : birthdays) {
             TextView birthdayLine = new TextView(context);
@@ -81,7 +75,7 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
             birthdayList.addView(birthdayLine);
         }
 
-        BirthdayNotificationScheduler.scheduleNotifications(context,  birthdays);
+        BirthdayNotificationScheduler.scheduleNextNotification(context, birthdays);
     }
 
     @Override
