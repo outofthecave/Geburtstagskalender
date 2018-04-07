@@ -5,13 +5,13 @@ Simple Android app for a birthday calendar in German
 
 ### Core Features
 
-- [ ] Browse the list of birthdays in chronological order of month and day with the next upcoming birthday first (timeline)
+- [x] Browse the list of birthdays in chronological order of month and day with the next upcoming birthday first (timeline)
 - [x] Add a birthday (day and month and the name of the person are mandatory, year is optional)
 - [ ] Modify a birthday
 - [ ] Delete a birthday
-- [ ] Get notified on the day of a birthday even when the app isn't running
+- [x] Get notified on the day of a birthday even when the app isn't running
 - [x] Persist the birthdays between app launches
-- [ ] Birthdays are automatically carried over to the next year (or to the next leap year for Feb 29 birthdays)
+- [x] Birthdays are automatically carried over to the next year (or to the next leap year for Feb 29 birthdays)
 
 ### Nice-to-have Features
 
