@@ -25,6 +25,7 @@ import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
     public static final String EXTRA_BIRTHDAY_TO_ADD = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
+    private static final int ADD_BIRTHDAY_REQUEST_CODE = 1;
 
     private TimelineRecyclerViewAdapter recyclerViewAdapter;
 
@@ -48,24 +49,32 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         recyclerView.setAdapter(recyclerViewAdapter);
 
         AppDatabase database = AppDatabase.getInstance(context);
-        Intent intent = getIntent();
-        Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
-        if (birthdayToAdd != null) {
-            new AsyncAddBirthdayAndGetAllBirthdaysTask(context, database, this).execute(birthdayToAdd);
-        } else {
-            new AsyncGetAllBirthdaysTask(context, database, this).execute();
-        }
+        new AsyncGetAllBirthdaysTask(context, database, this).execute();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddBirthdayActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_BIRTHDAY_REQUEST_CODE);
             }
         });
 
         BirthdayNotifier.registerNotificationChannel(context);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode != ADD_BIRTHDAY_REQUEST_CODE || resultCode != RESULT_OK) {
+            return;
+        }
+
+        AppDatabase database = AppDatabase.getInstance(this);
+        Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
+        if (birthdayToAdd == null) {
+            return;
+        }
+        new AsyncAddBirthdayAndGetAllBirthdaysTask(this, database, this).execute(birthdayToAdd);
     }
 
     @Override

@@ -47,7 +47,8 @@ public class AddBirthdayActivity extends AppCompatActivity {
 
         intent.putExtra(TimelineActivity.EXTRA_BIRTHDAY_TO_ADD, birthday);
 
-        startActivity(intent);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void remindUserToEnterName() {
