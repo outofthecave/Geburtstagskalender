@@ -5,26 +5,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
 import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
 import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayAndGetAllBirthdaysTask;
 import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
+import com.example.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
     public static final String EXTRA_BIRTHDAY_TO_ADD = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
+
+    private TimelineRecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,15 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.birthdayRecycler);
+        // Improve performance because changes in content do not change the layout size of the RecyclerView.
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // The list will be filled once we get the data from the database.
+        this.recyclerViewAdapter = new TimelineRecyclerViewAdapter(Collections.<Birthday>emptyList());
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         AppDatabase database = AppDatabase.getInstance(context);
         Intent intent = getIntent();
@@ -59,21 +70,11 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
 
     @Override
     public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
-        LinearLayout birthdayList = (LinearLayout) findViewById(R.id.birthdayList);
-
         // Make a shallow copy so we can sort without changing the parameter.
         birthdays = new ArrayList<>(birthdays);
         Collections.sort(birthdays, YearlyRecurringBirthdayComparator.forReferenceDateToday());
 
-        for (Birthday birthday : birthdays) {
-            TextView birthdayLine = new TextView(context);
-            String yearString = "";
-            if (birthday.year != null) {
-                yearString = birthday.year.toString();
-            }
-            birthdayLine.setText(String.format(Locale.ROOT, "%d.%d.%s %s", birthday.day, birthday.month, yearString, birthday.name));
-            birthdayList.addView(birthdayLine);
-        }
+        recyclerViewAdapter.setBirthdays(birthdays);
 
         BirthdayNotificationScheduler.scheduleNextNotification(context, birthdays);
     }
