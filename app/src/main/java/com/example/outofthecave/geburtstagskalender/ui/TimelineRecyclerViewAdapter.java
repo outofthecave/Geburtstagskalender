@@ -1,5 +1,7 @@
 package com.example.outofthecave.geburtstagskalender.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,9 @@ import com.example.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivit
 import com.example.outofthecave.geburtstagskalender.R;
 import com.example.outofthecave.geburtstagskalender.TimelineActivity;
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.example.outofthecave.geburtstagskalender.model.BirthdayUpdate;
+import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.example.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,9 +59,11 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Birthday birthday = birthdays.get(position);
 
-        String yearString = "";
+        final String yearString;
         if (birthday.year != null) {
             yearString = birthday.year.toString();
+        } else {
+            yearString = "";
         }
         String text = String.format(Locale.ROOT, "%d.%d.%s %s", birthday.day, birthday.month, yearString, birthday.name);
 
@@ -77,7 +84,20 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
         deleteButton.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view) {
-                // TODO Show popup to confirm deletion.
+                String msg = String.format(Locale.ROOT, "Geburtstag von %s am %d.%d.%s wirklich löschen?", birthday.name, birthday.day, birthday.month, yearString);
+                new AlertDialog.Builder(activity)
+                        .setMessage(msg)
+                        .setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                BirthdayUpdate update = new BirthdayUpdate();
+                                update.birthdayToReplace = birthday;
+                                AppDatabase database = AppDatabase.getInstance(activity);
+                                new AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask(activity, database, activity).execute(update);
+                            }
+                        })
+                        .setNegativeButton("Behalten", null)
+                        .show();
             }
         });
     }
