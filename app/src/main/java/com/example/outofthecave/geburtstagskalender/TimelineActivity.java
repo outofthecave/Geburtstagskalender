@@ -13,9 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.example.outofthecave.geburtstagskalender.model.BirthdayUpdate;
 import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.example.outofthecave.geburtstagskalender.room.AsyncAddBirthdayAndGetAllBirthdaysTask;
+import com.example.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
 import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
 import com.example.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
 
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
     public static final String EXTRA_BIRTHDAY_TO_ADD = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
-    private static final int ADD_BIRTHDAY_REQUEST_CODE = 1;
+    public static final String EXTRA_BIRTHDAY_TO_REPLACE = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_REPLACE";
 
     private TimelineRecyclerViewAdapter recyclerViewAdapter;
 
@@ -45,7 +46,7 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // The list will be filled once we get the data from the database.
-        this.recyclerViewAdapter = new TimelineRecyclerViewAdapter(Collections.<Birthday>emptyList());
+        this.recyclerViewAdapter = new TimelineRecyclerViewAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         AppDatabase database = AppDatabase.getInstance(context);
@@ -55,8 +56,8 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, AddBirthdayActivity.class);
-                startActivityForResult(intent, ADD_BIRTHDAY_REQUEST_CODE);
+                Intent intent = new Intent(context, AddEditDeleteBirthdayActivity.class);
+                startActivityForResult(intent, AddEditDeleteBirthdayActivity.REQUEST_CODE);
             }
         });
 
@@ -65,16 +66,22 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode != ADD_BIRTHDAY_REQUEST_CODE || resultCode != RESULT_OK) {
+        if (requestCode != AddEditDeleteBirthdayActivity.REQUEST_CODE || resultCode != RESULT_OK) {
             return;
         }
 
-        AppDatabase database = AppDatabase.getInstance(this);
+        Birthday birthdayToReplace = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_REPLACE);
         Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
-        if (birthdayToAdd == null) {
+        if (birthdayToReplace == null && birthdayToAdd == null) {
             return;
         }
-        new AsyncAddBirthdayAndGetAllBirthdaysTask(this, database, this).execute(birthdayToAdd);
+
+        BirthdayUpdate update = new BirthdayUpdate();
+        update.birthdayToReplace = birthdayToReplace;
+        update.birthdayToAdd = birthdayToAdd;
+
+        AppDatabase database = AppDatabase.getInstance(this);
+        new AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask(this, database, this).execute(update);
     }
 
     @Override

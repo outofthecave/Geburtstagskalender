@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
 
@@ -18,5 +19,5 @@ public interface BirthdayDao {
     void add(Birthday birthday);
 
     @Delete
-    void remove(Birthday birthday);
+    void delete(Birthday birthday);
 }

@@ -1,21 +1,25 @@
 package com.example.outofthecave.geburtstagskalender.ui;
 
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity;
 import com.example.outofthecave.geburtstagskalender.R;
+import com.example.outofthecave.geburtstagskalender.TimelineActivity;
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRecyclerViewAdapter.ViewHolder> {
+    private final TimelineActivity activity;
     private List<Birthday> birthdays;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -27,8 +31,9 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
         }
     }
 
-    public TimelineRecyclerViewAdapter(List<Birthday> birthdays) {
-        this.birthdays = birthdays;
+    public TimelineRecyclerViewAdapter(TimelineActivity activity) {
+        this.activity = activity;
+        this.birthdays = Collections.emptyList();
     }
 
     public TimelineRecyclerViewAdapter setBirthdays(List<Birthday> birthdays) {
@@ -47,7 +52,7 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Birthday birthday = birthdays.get(position);
+        final Birthday birthday = birthdays.get(position);
 
         String yearString = "";
         if (birthday.year != null) {
@@ -57,6 +62,24 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
 
         TextView textView = holder.layout.findViewById(R.id.timelineItemTextView);
         textView.setText(text);
+
+        ImageButton editButton = holder.layout.findViewById(R.id.timelineItemEditButton);
+        editButton.setOnClickListener(new View.OnClickListener()  {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, AddEditDeleteBirthdayActivity.class);
+                intent.putExtra(TimelineActivity.EXTRA_BIRTHDAY_TO_REPLACE, birthday);
+                activity.startActivityForResult(intent, AddEditDeleteBirthdayActivity.REQUEST_CODE);
+            }
+        });
+
+        ImageButton deleteButton = holder.layout.findViewById(R.id.timelineItemDeleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener()  {
+            @Override
+            public void onClick(View view) {
+                // TODO Show popup to confirm deletion.
+            }
+        });
     }
 
     @Override

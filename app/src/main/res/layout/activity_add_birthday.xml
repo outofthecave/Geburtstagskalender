@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.outofthecave.geburtstagskalender.AddBirthdayActivity">
+    tools:context="com.example.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -40,12 +40,27 @@
                 android:layout_height="wrap_content"
                 android:text="Jahreszahl auch speichern" />
 
-            <Button
-                android:id="@+id/addBirthdayButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onAddBirthdayButtonClick"
-                android:text="Speichern" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/saveBirthdayButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onSaveBirthdayButtonClick"
+                    android:text="Speichern" />
+
+                <Button
+                    android:id="@+id/deleteBirthdayButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onDeleteBirthdayButtonClick"
+                    android:text="Löschen" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

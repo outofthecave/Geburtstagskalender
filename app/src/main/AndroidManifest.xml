@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddBirthdayActivity"></activity>
+        <activity android:name=".AddEditDeleteBirthdayActivity"></activity>
         <receiver android:name=".BirthdayNotifier" ></receiver>
 
         <receiver android:name=".BirthdayNotificationScheduler" android:enabled="false">
