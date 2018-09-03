@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.example.outofthecave.geburtstagskalender.model.CalendarUtil;
 
 import java.util.Calendar;
 
@@ -42,7 +43,7 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
                 Calendar now = Calendar.getInstance();
                 year = now.get(Calendar.YEAR);
             }
-            datePicker.updateDate(year, birthdayToReplace.month, birthdayToReplace.day);
+            datePicker.updateDate(year, CalendarUtil.getMonthForCalendar(birthdayToReplace), birthdayToReplace.day);
 
             Switch doSaveYear = findViewById(R.id.doSaveYear);
             doSaveYear.setChecked(birthdayToReplace.year != null);
