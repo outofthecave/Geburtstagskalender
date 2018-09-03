@@ -70,7 +70,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, CalendarUtil.getMonthForCalendar(upcomingBirthdays.get(0)));
         calendar.set(Calendar.DAY_OF_MONTH, upcomingBirthdays.get(0).day);
-        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
