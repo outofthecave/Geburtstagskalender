@@ -16,6 +16,7 @@ import android.util.Log;
 import com.example.outofthecave.geburtstagskalender.model.Birthday;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -56,6 +57,9 @@ public class BirthdayNotifier extends BroadcastReceiver {
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(0, notificationBuilder.build());
+
+            Calendar now = Calendar.getInstance();
+            BirthdayNotificationScheduler.setLastTriggeredTimestamp(now.getTimeInMillis());
         }
 
         new BirthdayNotificationScheduler().scheduleNextNotification(context);

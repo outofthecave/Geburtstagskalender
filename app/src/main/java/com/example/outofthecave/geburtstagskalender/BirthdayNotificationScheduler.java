@@ -24,6 +24,13 @@ import java.util.List;
  * Schedules notifications for upcoming birthdays.
  */
 public class BirthdayNotificationScheduler extends BroadcastReceiver implements AsyncGetAllBirthdaysTask.Callbacks {
+    /** The timestamp at which the last notification was shown to the user. */
+    private static long lastTriggeredTimestamp = 0L;
+
+    public static void setLastTriggeredTimestamp(long lastTriggeredTimestamp) {
+        BirthdayNotificationScheduler.lastTriggeredTimestamp = lastTriggeredTimestamp;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         scheduleNextNotification(context);
@@ -50,12 +57,23 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
             return;
         }
 
+        // If we've already triggered a notification today, we don't want to trigger another one on
+        // the same day, so only consider birthdays starting tomorrow.
+        Calendar referenceDate = Calendar.getInstance();
+        Calendar lastTriggeredDate = Calendar.getInstance();
+        lastTriggeredDate.setTimeInMillis(lastTriggeredTimestamp);
+        if (CalendarUtil.isSameDay(lastTriggeredDate, referenceDate)) {
+            referenceDate.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        int referenceMonth = CalendarUtil.getOneBasedMonth(referenceDate);
+        int referenceDay = referenceDate.get(Calendar.DAY_OF_MONTH);
+        Comparator<Birthday> comparator = YearlyRecurringBirthdayComparator.forReferenceDate(referenceMonth, referenceDay);
+
         // Android only allows us to set one alarm triggering the
         // BirthdayNotifier, so we only set an alarm for the closest upcoming
         // birthdays (in case there are multiple birthdays on the same date).
         ArrayList<Birthday> upcomingBirthdays = new ArrayList<>(1);
         upcomingBirthdays.add(birthdays.get(0));
-        Comparator<Birthday> comparator = YearlyRecurringBirthdayComparator.forReferenceDateToday();
         for (int i = 1; i < birthdays.size(); ++i) {
             Birthday birthday = birthdays.get(i);
             int cmp = comparator.compare(birthday, upcomingBirthdays.get(0));
@@ -78,7 +96,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
             calendar.roll(Calendar.YEAR, 1);
         }
         long triggerTimestamp = calendar.getTimeInMillis();
-        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for epoch time: " + triggerTimestamp);
+        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for the name \"" + upcomingBirthdays.get(0).name + "\" for epoch time: " + triggerTimestamp);
 
         notifierIntent.putParcelableArrayListExtra(BirthdayNotifier.EXTRA_BIRTHDAYS, upcomingBirthdays);
         PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
