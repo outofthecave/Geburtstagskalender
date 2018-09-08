@@ -13,18 +13,26 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".TimelineActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddEditDeleteBirthdayActivity" />
-        <receiver android:name=".BirthdayNotifier" />
+        <activity
+            android:name=".AddEditDeleteBirthdayActivity"
+            android:exported="false" />
+        <receiver
+            android:name=".BirthdayNotifier"
+            android:exported="false" />
 
-        <receiver android:name=".BirthdayNotificationScheduler" android:enabled="false">
+        <!-- Disabled by default and enabled by the code on first app launch. -->
+        <receiver
+            android:name=".BirthdayNotificationScheduler"
+            android:enabled="false"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
