@@ -30,7 +30,7 @@ public class BirthdayNotifier extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         ArrayList<Birthday> todaysBirthdays = intent.getParcelableArrayListExtra(EXTRA_BIRTHDAYS);
-        Log.d("BirthdayNotifier", "Triggered scheduled notification for birthdays: " + todaysBirthdays);
+        Log.d("BirthdayNotifier", "Triggered a scheduled notification for " + (todaysBirthdays == null ? null : todaysBirthdays.size()) + " birthdays.");
         if (todaysBirthdays != null && !todaysBirthdays.isEmpty()) {
             String joinedNames = joinNames(todaysBirthdays, "und", false);
             String title = String.format("Geburtstag von %s", joinedNames);

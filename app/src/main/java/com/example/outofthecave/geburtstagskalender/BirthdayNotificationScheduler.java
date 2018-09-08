@@ -98,7 +98,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
             calendar.roll(Calendar.YEAR, 1);
         }
         long triggerTimestamp = calendar.getTimeInMillis();
-        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for the name \"" + upcomingBirthdays.get(0).name + "\" for epoch time: " + triggerTimestamp);
+        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for epoch time: " + triggerTimestamp);
 
         notifierIntent.putParcelableArrayListExtra(BirthdayNotifier.EXTRA_BIRTHDAYS, upcomingBirthdays);
         PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
