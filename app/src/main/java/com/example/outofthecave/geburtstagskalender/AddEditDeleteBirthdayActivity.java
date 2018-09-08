@@ -33,15 +33,17 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         this.birthdayToReplace = intent.getParcelableExtra(TimelineActivity.EXTRA_BIRTHDAY_TO_REPLACE);
 
+        DatePicker datePicker = findViewById(R.id.datePicker);
+        View yearPicker = getYearPicker(datePicker);
         if (birthdayToReplace != null) {
             EditText nameTextField = findViewById(R.id.nameTextField);
             nameTextField.setText(birthdayToReplace.name);
 
-            DatePicker datePicker = findViewById(R.id.datePicker);
             Integer year = birthdayToReplace.year;
             if (year == null) {
                 Calendar now = Calendar.getInstance();
                 year = now.get(Calendar.YEAR);
+                yearPicker.setVisibility(View.GONE);
             }
             datePicker.updateDate(year, CalendarUtil.getMonthForCalendar(birthdayToReplace), birthdayToReplace.day);
 
@@ -49,9 +51,26 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
             doSaveYear.setChecked(birthdayToReplace.year != null);
 
         } else {
+            yearPicker.setVisibility(View.GONE);
+
             Button deleteButton = findViewById(R.id.deleteBirthdayButton);
             deleteButton.setVisibility(View.GONE);
         }
+    }
+
+    public void onDoSaveYearClick(View view) {
+        Switch doSaveYear = findViewById(R.id.doSaveYear);
+        DatePicker datePicker = findViewById(R.id.datePicker);
+        View yearPicker = getYearPicker(datePicker);
+        if (doSaveYear.isChecked()) {
+            yearPicker.setVisibility(View.VISIBLE);
+        } else {
+            yearPicker.setVisibility(View.GONE);
+        }
+    }
+
+    private View getYearPicker(DatePicker datePicker) {
+        return datePicker.findViewById(getResources().getIdentifier("year", "id", "android"));
     }
 
     public void onSaveBirthdayButtonClick(View view) {

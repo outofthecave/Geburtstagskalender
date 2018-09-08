@@ -39,8 +39,10 @@
 
             </LinearLayout>
 
-            <com.example.outofthecave.geburtstagskalender.ui.MyDatePicker
+            <DatePicker
                 android:id="@+id/datePicker"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/fab_margin" />
@@ -49,9 +51,10 @@
                 android:id="@+id/doSaveYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onDoSaveYearClick"
                 android:padding="@dimen/fab_margin"
                 android:switchPadding="@dimen/fab_margin"
-                android:text="Jahreszahl auch speichern" />
+                android:text="Geburtsjahr auch speichern" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
