@@ -21,12 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddEditDeleteBirthdayActivity"></activity>
-        <receiver android:name=".BirthdayNotifier" ></receiver>
+        <activity android:name=".AddEditDeleteBirthdayActivity" />
+        <receiver android:name=".BirthdayNotifier" />
 
         <receiver android:name=".BirthdayNotificationScheduler" android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
