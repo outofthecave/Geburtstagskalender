@@ -33,7 +33,9 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        scheduleNextNotification(context);
+        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+            scheduleNextNotification(context);
+        }
     }
 
     public void scheduleNextNotification(Context context) {
