@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/nameTextField"
+                    android:padding="@dimen/fab_margin"
+                    android:text="Name:" />
+
+                <EditText
+                    android:id="@+id/nameTextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:padding="@dimen/fab_margin"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/fab_margin" />
+
+            <Switch
+                android:id="@+id/doSaveYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDoSaveYearClick"
+                android:padding="@dimen/fab_margin"
+                android:switchPadding="@dimen/fab_margin"
+                android:text="Geburtsjahr auch speichern" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/fab_margin">
+
+                <Button
+                    android:id="@+id/saveBirthdayButton"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onSaveBirthdayButtonClick"
+                    android:padding="@dimen/fab_margin"
+                    android:text="Speichern" />
+
+                <Button
+                    android:id="@+id/deleteBirthdayButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onDeleteBirthdayButtonClick"
+                    android:padding="@dimen/fab_margin"
+                    android:text="Löschen" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
