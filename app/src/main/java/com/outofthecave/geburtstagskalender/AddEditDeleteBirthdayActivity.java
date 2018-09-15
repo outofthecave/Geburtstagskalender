@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.CalendarUtil;
+import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.CalendarUtil;
 
 import java.util.Calendar;
 

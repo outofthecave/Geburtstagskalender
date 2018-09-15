@@ -1,10 +1,10 @@
-package com.example.outofthecave.geburtstagskalender.room;
+package com.outofthecave.geburtstagskalender.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.BirthdayUpdate;
+import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.BirthdayUpdate;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,11 @@
-package com.example.outofthecave.geburtstagskalender.room;
+package com.outofthecave.geburtstagskalender.room;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.Birthday;
 
 @Database(entities = {Birthday.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

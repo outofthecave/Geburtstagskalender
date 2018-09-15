@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.outofthecave.geburtstagskalender", appContext.getPackageName());
+        assertEquals("com.outofthecave.geburtstagskalender", appContext.getPackageName());
     }
 }

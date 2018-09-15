@@ -1,13 +1,13 @@
-package com.example.outofthecave.geburtstagskalender.room;
+package com.outofthecave.geburtstagskalender.room;
 
 import android.os.AsyncTask;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.Birthday;
 
-public final class AsyncDeleteBirthdayTask extends AsyncTask<Birthday, Void, Void> {
+public final class AsyncAddBirthdayTask extends AsyncTask<Birthday, Void, Void> {
     private final AppDatabase database;
 
-    public AsyncDeleteBirthdayTask(AppDatabase database) {
+    public AsyncAddBirthdayTask(AppDatabase database) {
         this.database = database;
     }
 
@@ -22,7 +22,7 @@ public final class AsyncDeleteBirthdayTask extends AsyncTask<Birthday, Void, Voi
             if (isCancelled()) {
                 break;
             }
-            birthdayDao.delete(birthday);
+            birthdayDao.add(birthday);
         }
         return null;
     }

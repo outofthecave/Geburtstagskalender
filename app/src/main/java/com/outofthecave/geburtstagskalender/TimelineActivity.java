@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,21 +12,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.BirthdayUpdate;
-import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
-import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.example.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
-import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
-import com.example.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
+import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.BirthdayUpdate;
+import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
+import com.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
-    public static final String EXTRA_BIRTHDAY_TO_ADD = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
-    public static final String EXTRA_BIRTHDAY_TO_REPLACE = "com.example.outofthecave.geburtstagskalender.BIRTHDAY_TO_REPLACE";
+    public static final String EXTRA_BIRTHDAY_TO_ADD = "com.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
+    public static final String EXTRA_BIRTHDAY_TO_REPLACE = "com.outofthecave.geburtstagskalender.BIRTHDAY_TO_REPLACE";
 
     private TimelineRecyclerViewAdapter recyclerViewAdapter;
 

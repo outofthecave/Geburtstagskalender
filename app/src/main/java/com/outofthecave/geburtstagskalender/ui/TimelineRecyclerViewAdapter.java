@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender.ui;
+package com.outofthecave.geburtstagskalender.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity;
-import com.example.outofthecave.geburtstagskalender.R;
-import com.example.outofthecave.geburtstagskalender.TimelineActivity;
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.BirthdayUpdate;
-import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.example.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity;
+import com.outofthecave.geburtstagskalender.R;
+import com.outofthecave.geburtstagskalender.TimelineActivity;
+import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.BirthdayUpdate;
+import com.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
 
 import java.util.Collections;
 import java.util.List;
