@@ -27,4 +27,8 @@ Simple Android app for a birthday calendar in German
 - [ ] Add a button to the timeline view to reset the scroll position to the current date
 - [ ] Option to be notified about Feb 29 birthdays in non-leap years on Feb 28, on Mar 1, or not at all
 - [ ] Add a button to the notification to snooze it for a fixed amount of time (e.g., one hour)
-- [ ] English translation 
+- [ ] English translation
+
+## Contributing
+
+If you would like to contribute to this app, please send an email to marion.zepf@gmail.com
