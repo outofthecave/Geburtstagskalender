@@ -1,6 +1,6 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.Birthday;
 
 import org.junit.Test;
 

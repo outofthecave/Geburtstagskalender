@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender.model;
+package com.outofthecave.geburtstagskalender.model;
 
 import org.junit.Test;
 

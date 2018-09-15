@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.Birthday;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +25,7 @@ import java.util.List;
 public class BirthdayNotifier extends BroadcastReceiver {
     private static final String NOTIFICATION_CHANNEL_ID = "birthday";
 
-    public static final String EXTRA_BIRTHDAYS = "com.example.outofthecave.geburtstagskalender.EXTRA_BIRTHDAYS";
+    public static final String EXTRA_BIRTHDAYS = "com.outofthecave.geburtstagskalender.EXTRA_BIRTHDAYS";
 
     @Override
     public void onReceive(Context context, Intent intent) {

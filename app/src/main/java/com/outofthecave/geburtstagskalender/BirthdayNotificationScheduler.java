@@ -1,4 +1,4 @@
-package com.example.outofthecave.geburtstagskalender;
+package com.outofthecave.geburtstagskalender;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,11 +9,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.example.outofthecave.geburtstagskalender.model.Birthday;
-import com.example.outofthecave.geburtstagskalender.model.CalendarUtil;
-import com.example.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
-import com.example.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.example.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.CalendarUtil;
+import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
+import com.outofthecave.geburtstagskalender.room.AppDatabase;
+import com.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
