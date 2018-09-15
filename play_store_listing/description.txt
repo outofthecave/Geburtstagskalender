@@ -1,0 +1,23 @@
+Short Description
+
+Einfach an Geburtstage erinnert werden, ohne persönliche Daten preiszugeben
+
+Full Description
+
+Nie wieder einen Geburtstag vergessen!
+Diese App erinnert Sie zuverlässig mit einer dezenten Benachrichtigung, wenn jemand Geburtstag hat.
+
+Ihre Daten gehören Ihnen selbst!
+Wenn Sie die Geburtstage Ihrer Lieben in diese App eintragen, werden diese direkt auf Ihrem Gerät gespeichert und nicht auf den Servern eines Daten-hungrigen Großkonzerns. Dadurch haben Sie die volle Kontrolle darüber, was mit Ihren Daten passiert. Wenn Sie das nicht einfach glauben wollen (und das sollten Sie auch nicht), können Sie es überprüfen: Vergewissern Sie sich während der Installation, dass Sie dieser App nicht die Berechtigung geben müssen, Ihre Internetverbindung zu nutzen. Dadurch kann die App Ihre Daten nicht übers Internet weitergeben, weil sie die Berechtigung dazu nicht hat.
+
+Wo ist der Haken?
+Dadurch, dass die Geburtstage nur auf Ihrem Gerät gespeichert werden, gibt es keine automatische Sicherungskopie der Daten für den Fall, dass Sie Ihre Gerät verlieren oder es kaputt geht. Um Datenverlust zu vermeiden, empfehlen wir Ihnen, die Geburtstage zusätzlich an einem anderen Ort zu speichern, indem Sie sie z.B. auf Papier aufschreiben.
+Außerdem müssen Sie die Geburtstage auf jedem Gerät, auf dem Sie diese App nutzen, von Hand eingeben. Die Geburtstage werden nicht automatisch zwischen Geräten abgeglichen. (Dazu müssten die Daten nämlich auf einem Server gespeichert werden.)
+
+Details:
+- An Geburtstage am 29. Februar werden Sie in nicht-Schaltjahren am 1. März erinnert.
+- Die Benachrichtigungen werden um Mitternacht angezeigt und machen kein Geräusch und keine Vibration.
+
+Diese App ist Open Source Software. Den Quellcode finden Sie unter https://github.com/outofthecave/Geburtstagskalender
+
+Für Fragen, Beschwerden und Anregungen hinterlassen Sie bitte einen Kommentar hier im Google Play Store. Eine Liste von zukünftig geplanten Funktionen finden Sie hier (auf englisch): https://github.com/outofthecave/Geburtstagskalender/blob/master/README.md
