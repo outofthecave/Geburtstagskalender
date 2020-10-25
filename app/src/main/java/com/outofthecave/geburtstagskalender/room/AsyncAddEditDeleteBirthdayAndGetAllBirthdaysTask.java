@@ -37,14 +37,14 @@ public final class AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask extends Asyn
         }
 
         if (!deletions.isEmpty()) {
-            deleteBirthdayTask.doInBackgroundImpl(deletions.toArray(new Birthday[deletions.size()]));
+            deleteBirthdayTask.doInBackgroundImpl(deletions.toArray(new Birthday[0]));
             if (isCancelled()) {
                 return null;
             }
         }
 
         if (!additions.isEmpty()) {
-            addBirthdayTask.doInBackgroundImpl(additions.toArray(new Birthday[additions.size()]));
+            addBirthdayTask.doInBackgroundImpl(additions.toArray(new Birthday[0]));
             if (isCancelled()) {
                 return null;
             }

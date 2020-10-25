@@ -65,6 +65,8 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
         if (requestCode != AddEditDeleteBirthdayActivity.REQUEST_CODE || resultCode != RESULT_OK) {
             return;
         }
