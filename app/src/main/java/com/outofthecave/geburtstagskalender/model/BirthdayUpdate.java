@@ -1,6 +1,6 @@
 package com.outofthecave.geburtstagskalender.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
