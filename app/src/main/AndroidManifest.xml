@@ -24,6 +24,9 @@
         <activity
             android:name=".AddEditDeleteBirthdayActivity"
             android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <receiver
             android:name=".BirthdayNotifier"
             android:exported="false" />

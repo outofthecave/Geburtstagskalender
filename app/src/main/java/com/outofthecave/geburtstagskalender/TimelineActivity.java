@@ -12,6 +12,7 @@ import needle.Needle;
 import needle.UiRelatedTask;
 
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.outofthecave.geburtstagskalender.model.Birthday;
 import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
@@ -58,6 +59,15 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
                 onBirthdayListLoaded(context, birthdays);
+            }
+        });
+
+        ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SettingsActivity.class);
+                startActivityForResult(intent, SettingsActivity.REQUEST_CODE);
             }
         });
 
