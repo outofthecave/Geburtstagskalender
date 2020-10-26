@@ -13,17 +13,19 @@ import com.outofthecave.geburtstagskalender.model.Birthday;
 import com.outofthecave.geburtstagskalender.model.CalendarUtil;
 import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 import com.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 
+import needle.Needle;
+import needle.UiRelatedTask;
+
 /**
  * Schedules notifications for upcoming birthdays.
  */
-public class BirthdayNotificationScheduler extends BroadcastReceiver implements AsyncGetAllBirthdaysTask.Callbacks {
+public class BirthdayNotificationScheduler extends BroadcastReceiver {
     /** The timestamp at which the last notification was shown to the user. */
     private static long lastTriggeredTimestamp = 0L;
 
@@ -38,14 +40,19 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver implements 
         }
     }
 
-    public void scheduleNextNotification(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
-        new AsyncGetAllBirthdaysTask(context, database, this).execute();
-    }
+    public void scheduleNextNotification(final Context context) {
+        final AppDatabase database = AppDatabase.getInstance(context);
+        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+            @Override
+            protected List<Birthday> doWork() {
+                return database.birthdayDao().getAll();
+            }
 
-    @Override
-    public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
-        scheduleNextNotification(context, birthdays);
+            @Override
+            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
+                scheduleNextNotification(context, birthdays);
+            }
+        });
     }
 
     public static void scheduleNextNotification(Context context, List<Birthday> birthdays) {

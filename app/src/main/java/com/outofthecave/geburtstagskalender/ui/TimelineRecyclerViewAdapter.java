@@ -7,6 +7,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import needle.Needle;
+import needle.UiRelatedTask;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,8 @@ import com.outofthecave.geburtstagskalender.AddEditDeleteBirthdayActivity;
 import com.outofthecave.geburtstagskalender.R;
 import com.outofthecave.geburtstagskalender.TimelineActivity;
 import com.outofthecave.geburtstagskalender.model.Birthday;
-import com.outofthecave.geburtstagskalender.model.BirthdayUpdate;
 import com.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.room.BirthdayDao;
 
 import java.util.Collections;
 import java.util.List;
@@ -93,10 +95,20 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
                         .setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                BirthdayUpdate update = new BirthdayUpdate();
-                                update.birthdayToReplace = birthday;
-                                AppDatabase database = AppDatabase.getInstance(activity);
-                                new AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask(activity, database, activity).execute(update);
+                                final AppDatabase database = AppDatabase.getInstance(activity);
+                                Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+                                    @Override
+                                    protected List<Birthday> doWork() {
+                                        BirthdayDao birthdayDao = database.birthdayDao();
+                                        birthdayDao.delete(birthday);
+                                        return birthdayDao.getAll();
+                                    }
+
+                                    @Override
+                                    protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
+                                        activity.onBirthdayListLoaded(activity, birthdays);
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton("Behalten", null)

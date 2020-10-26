@@ -8,22 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+import needle.Needle;
+import needle.UiRelatedTask;
 
 import android.view.View;
 
 import com.outofthecave.geburtstagskalender.model.Birthday;
-import com.outofthecave.geburtstagskalender.model.BirthdayUpdate;
 import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayComparator;
 import com.outofthecave.geburtstagskalender.room.AppDatabase;
-import com.outofthecave.geburtstagskalender.room.AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask;
-import com.outofthecave.geburtstagskalender.room.AsyncGetAllBirthdaysTask;
+import com.outofthecave.geburtstagskalender.room.BirthdayDao;
 import com.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBirthdaysTask.Callbacks {
+public class TimelineActivity extends AppCompatActivity {
     public static final String EXTRA_BIRTHDAY_TO_ADD = "com.outofthecave.geburtstagskalender.BIRTHDAY_TO_ADD";
     public static final String EXTRA_BIRTHDAY_TO_REPLACE = "com.outofthecave.geburtstagskalender.BIRTHDAY_TO_REPLACE";
 
@@ -49,7 +49,17 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
         recyclerView.setAdapter(recyclerViewAdapter);
 
         AppDatabase database = AppDatabase.getInstance(context);
-        new AsyncGetAllBirthdaysTask(context, database, this).execute();
+        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+            @Override
+            protected List<Birthday> doWork() {
+                return database.birthdayDao().getAll();
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
+                onBirthdayListLoaded(context, birthdays);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -71,21 +81,34 @@ public class TimelineActivity extends AppCompatActivity implements AsyncGetAllBi
             return;
         }
 
-        Birthday birthdayToReplace = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_REPLACE);
-        Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
+        final Birthday birthdayToReplace = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_REPLACE);
+        final Birthday birthdayToAdd = intent.getParcelableExtra(EXTRA_BIRTHDAY_TO_ADD);
         if (birthdayToReplace == null && birthdayToAdd == null) {
             return;
         }
 
-        BirthdayUpdate update = new BirthdayUpdate();
-        update.birthdayToReplace = birthdayToReplace;
-        update.birthdayToAdd = birthdayToAdd;
+        final Context context = this;
+        final AppDatabase database = AppDatabase.getInstance(this);
+        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+            @Override
+            protected List<Birthday> doWork() {
+                BirthdayDao birthdayDao = database.birthdayDao();
+                if (birthdayToReplace != null) {
+                    birthdayDao.delete(birthdayToReplace);
+                }
+                if (birthdayToAdd != null) {
+                    birthdayDao.add(birthdayToAdd);
+                }
+                return birthdayDao.getAll();
+            }
 
-        AppDatabase database = AppDatabase.getInstance(this);
-        new AsyncAddEditDeleteBirthdayAndGetAllBirthdaysTask(this, database, this).execute(update);
+            @Override
+            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
+                onBirthdayListLoaded(context, birthdays);
+            }
+        });
     }
 
-    @Override
     public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
         // Make a shallow copy so we can sort without changing the parameter.
         birthdays = new ArrayList<>(birthdays);
