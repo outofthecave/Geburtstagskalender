@@ -1,10 +1,10 @@
 package com.outofthecave.geburtstagskalender.model;
 
-import android.arch.persistence.room.Entity;
+import androidx.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 

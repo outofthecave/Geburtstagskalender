@@ -2,8 +2,10 @@ package com.outofthecave.geburtstagskalender;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -11,7 +13,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.outofthecave.geburtstagskalender.model.Birthday;
@@ -47,7 +48,7 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
             }
             datePicker.updateDate(year, CalendarUtil.getMonthForCalendar(birthdayToReplace), birthdayToReplace.day);
 
-            Switch doSaveYear = findViewById(R.id.doSaveYear);
+            SwitchCompat doSaveYear = findViewById(R.id.doSaveYear);
             doSaveYear.setChecked(birthdayToReplace.year != null);
 
         } else {
@@ -59,7 +60,7 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
     }
 
     public void onDoSaveYearClick(View view) {
-        Switch doSaveYear = findViewById(R.id.doSaveYear);
+        SwitchCompat doSaveYear = findViewById(R.id.doSaveYear);
         DatePicker datePicker = findViewById(R.id.datePicker);
         View yearPicker = getYearPicker(datePicker);
         if (doSaveYear.isChecked()) {
@@ -104,7 +105,7 @@ public class AddEditDeleteBirthdayActivity extends AppCompatActivity {
             // Returned months are zero-based.
             birthday.month = datePicker.getMonth() + 1;
 
-            Switch doSaveYear = findViewById(R.id.doSaveYear);
+            SwitchCompat doSaveYear = findViewById(R.id.doSaveYear);
             if (doSaveYear.isChecked()) {
                 birthday.year = datePicker.getYear();
             }
