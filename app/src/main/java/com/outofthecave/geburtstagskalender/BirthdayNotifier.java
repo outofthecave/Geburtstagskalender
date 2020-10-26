@@ -8,12 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import needle.Needle;
+import needle.UiRelatedTask;
+
 import android.util.Log;
 
 import com.outofthecave.geburtstagskalender.model.Birthday;
+import com.outofthecave.geburtstagskalender.model.CalendarUtil;
+import com.outofthecave.geburtstagskalender.room.AppDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,10 +34,33 @@ public class BirthdayNotifier extends BroadcastReceiver {
     public static final String EXTRA_BIRTHDAYS = "com.outofthecave.geburtstagskalender.EXTRA_BIRTHDAYS";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        ArrayList<Birthday> todaysBirthdays = intent.getParcelableArrayListExtra(EXTRA_BIRTHDAYS);
-        Log.d("BirthdayNotifier", "Triggered a scheduled notification for " + (todaysBirthdays == null ? null : todaysBirthdays.size()) + " birthdays.");
-        if (todaysBirthdays != null && !todaysBirthdays.isEmpty()) {
+    public void onReceive(final Context context, Intent intent) {
+        List<Birthday> todaysBirthdays = intent.getParcelableArrayListExtra(EXTRA_BIRTHDAYS);
+        Log.d("BirthdayNotifier", "Triggered a scheduled notification for " + (todaysBirthdays == null ? null : todaysBirthdays.size()) + " birthday(s).");
+        if (todaysBirthdays != null) {
+            showNotification(context, todaysBirthdays);
+        } else {
+            final AppDatabase database = AppDatabase.getInstance(context);
+            Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+                @Override
+                protected List<Birthday> doWork() {
+                    Calendar now = Calendar.getInstance();
+                    int currentMonth = CalendarUtil.getOneBasedMonth(now);
+                    int currentDay = now.get(Calendar.DAY_OF_MONTH);
+                    return database.birthdayDao().getByDayMonth(currentDay, currentMonth);
+                }
+
+                @Override
+                protected void thenDoUiRelatedWork(@NonNull List<Birthday> todaysBirthdays) {
+                    Log.d("BirthdayNotifier", "Retrieved " + todaysBirthdays.size() + " birthday(s).");
+                    showNotification(context, todaysBirthdays);
+                }
+            });
+        }
+    }
+
+    private void showNotification(Context context, @NonNull List<Birthday> todaysBirthdays) {
+        if (!todaysBirthdays.isEmpty()) {
             String joinedNames = joinNames(todaysBirthdays, "und", false);
             String title = String.format("Geburtstag von %s", joinedNames);
 
