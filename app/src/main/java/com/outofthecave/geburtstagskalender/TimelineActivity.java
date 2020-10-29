@@ -49,19 +49,6 @@ public class TimelineActivity extends AppCompatActivity {
         this.recyclerViewAdapter = new TimelineRecyclerViewAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        AppDatabase database = AppDatabase.getInstance(context);
-        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
-            @Override
-            protected List<Birthday> doWork() {
-                return database.birthdayDao().getAll();
-            }
-
-            @Override
-            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
-                onBirthdayListLoaded(context, birthdays);
-            }
-        });
-
         ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +68,25 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         BirthdayNotifier.registerNotificationChannel(context);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final Context context = this;
+        final AppDatabase database = AppDatabase.getInstance(context);
+        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+            @Override
+            protected List<Birthday> doWork() {
+                return database.birthdayDao().getAll();
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
+                onBirthdayListLoaded(context, birthdays);
+            }
+        });
     }
 
     @Override
