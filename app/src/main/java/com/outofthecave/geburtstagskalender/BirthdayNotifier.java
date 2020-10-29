@@ -61,10 +61,11 @@ public class BirthdayNotifier extends BroadcastReceiver {
         /**
          * Called after a notification was shown (or would have been shown).
          *
+         * @param context The current context.
          * @param wasNotificationShown Whether the notification was actually shown.
          * @param todaysBirthdays The birthdays mentioned in the notification.
          */
-        default void afterNotification(boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {}
+        default void afterNotification(Context context, boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {}
     }
 
     public static void addListener(Listener listener) {
@@ -156,7 +157,7 @@ public class BirthdayNotifier extends BroadcastReceiver {
         BirthdayNotificationScheduler.scheduleNextNotification(context);
 
         for (Listener listener : getListeners()) {
-            listener.afterNotification(wasNotificationShown, todaysBirthdays);
+            listener.afterNotification(context, wasNotificationShown, todaysBirthdays);
         }
     }
 

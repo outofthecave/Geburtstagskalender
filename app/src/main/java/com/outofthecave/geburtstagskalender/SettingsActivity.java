@@ -24,9 +24,6 @@ import needle.UiRelatedTask;
 public class SettingsActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 2;
 
-    @Nullable
-    private Birthday fakeBirthdayInDatabase = null;
-
     private final BirthdayNotifier.Listener listener = new BirthdayNotifier.Listener() {
         @Override
         public void alarmTriggered(@Nullable List<Birthday> birthdaysFromParcel) {
@@ -46,27 +43,35 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterNotification(boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {
+        public void afterNotification(Context context, boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {
             TextView log = (TextView) SettingsActivity.this.findViewById(R.id.testNotificationLogTextView);
             if (wasNotificationShown) {
                 log.append(String.format("\nBenachrichtigung müsste jetzt angezeigt worden sein für %s Geburtstag(e).", todaysBirthdays.size()));
             } else {
                 log.append(String.format("\nBenachrichtigung wäre jetzt angezeigt worden für %s Geburtstag(e).", todaysBirthdays.size()));
             }
-
-            log.append("\nJetzt können wir den Beispiel-Geburtstag wieder löschen.");
-            if (fakeBirthdayInDatabase != null) {
-                final AppDatabase database = AppDatabase.getInstance(SettingsActivity.this);
-                Needle.onBackgroundThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        database.birthdayDao().delete(fakeBirthdayInDatabase);
-                        fakeBirthdayInDatabase = null;
-                    }
-                });
-            }
         }
     };
+
+    private static class DatabaseCleanUpListener implements BirthdayNotifier.Listener {
+        private final Birthday fakeBirthdayInDatabase;
+
+        DatabaseCleanUpListener(Birthday fakeBirthdayInDatabase) {
+            this.fakeBirthdayInDatabase = fakeBirthdayInDatabase;
+        }
+
+        @Override
+        public void afterNotification(Context context, boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {
+            final AppDatabase database = AppDatabase.getInstance(context);
+            Needle.onBackgroundThread().execute(new Runnable() {
+                @Override
+                public void run() {
+                    database.birthdayDao().delete(fakeBirthdayInDatabase);
+                    BirthdayNotifier.removeListener(DatabaseCleanUpListener.this);
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +110,8 @@ public class SettingsActivity extends AppCompatActivity {
         Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
             @Override
             protected Void doWork() {
-                fakeBirthdayInDatabase = fakeBirthday;
-                database.birthdayDao().add(fakeBirthdayInDatabase);
+                database.birthdayDao().add(fakeBirthday);
+                BirthdayNotifier.addListener(new DatabaseCleanUpListener(fakeBirthday));
                 return null;
             }
 
@@ -116,11 +121,6 @@ public class SettingsActivity extends AppCompatActivity {
                 log.append("\nErinnerung wurde bei Android beantragt - und zwar sofort.");
             }
         });
-    }
-
-    private void setTestNotificationButtonEnabled(boolean enabled) {
-        Button testNotificationButton = (Button) findViewById(R.id.testNotificationButton);
-        testNotificationButton.setEnabled(enabled);
     }
 
     private Birthday createFakeBirthday(Calendar calendar) {
