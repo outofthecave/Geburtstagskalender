@@ -91,7 +91,7 @@ public class BirthdayNotifier extends BroadcastReceiver {
             BirthdayNotificationScheduler.setLastTriggeredTimestamp(now.getTimeInMillis());
         }
 
-        new BirthdayNotificationScheduler().scheduleNextNotification(context);
+        BirthdayNotificationScheduler.scheduleNextNotification(context);
     }
 
     @VisibleForTesting

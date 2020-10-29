@@ -40,7 +40,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver {
         }
     }
 
-    public void scheduleNextNotification(final Context context) {
+    public static void scheduleNextNotification(final Context context) {
         final AppDatabase database = AppDatabase.getInstance(context);
         Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
             @Override
