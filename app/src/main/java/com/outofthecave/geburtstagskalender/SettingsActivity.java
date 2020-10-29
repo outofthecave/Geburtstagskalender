@@ -24,6 +24,8 @@ import needle.UiRelatedTask;
 public class SettingsActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 2;
 
+    public static boolean isTestNotificationScheduled = false;
+
     private final BirthdayNotifier.Listener listener = new BirthdayNotifier.Listener() {
         @Override
         public void alarmTriggered(@Nullable List<Birthday> birthdaysFromParcel) {
@@ -44,6 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void afterNotification(Context context, boolean wasNotificationShown, @NonNull List<Birthday> todaysBirthdays) {
+            isTestNotificationScheduled = false;
+
             TextView log = (TextView) SettingsActivity.this.findViewById(R.id.testNotificationLogTextView);
             if (wasNotificationShown) {
                 log.append(String.format("\nBenachrichtigung müsste jetzt angezeigt worden sein für %s Geburtstag(e).", todaysBirthdays.size()));
@@ -117,6 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             protected void thenDoUiRelatedWork(Void unused) {
+                isTestNotificationScheduled = true;
                 BirthdayNotificationScheduler.scheduleNotification(context, triggerTimestamp, fakeBirthdays);
                 log.append("\nErinnerung wurde bei Android beantragt - und zwar sofort.");
             }

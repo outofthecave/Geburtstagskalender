@@ -132,6 +132,8 @@ public class TimelineActivity extends AppCompatActivity {
 
         recyclerViewAdapter.setBirthdays(birthdays);
 
-        BirthdayNotificationScheduler.scheduleNextNotification(context, birthdays);
+        if (!SettingsActivity.isTestNotificationScheduled) {
+            BirthdayNotificationScheduler.scheduleNextNotification(context, birthdays);
+        }
     }
 }
