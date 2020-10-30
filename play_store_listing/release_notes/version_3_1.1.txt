@@ -1,0 +1,6 @@
+<de-DE>
+- Verhindert, dass die App abstürzt, wenn man denselben Geburtstag zweimal eingibt
+- Behebt ein Problem, weswegen Benachrichtigungen nicht angezeigt wurden
+- Fügt eine neue Einstellungsseite hinzu, auf der man die Benachrichtigungen testen kann
+- Garantiert, dass die sichtbare Liste der Geburtstage in der App automatisch aktualisiert wird, wenn sich die Geburtstage in der Datenbank ändern. (Das sollte vorher auch funktioniert haben, aber jetzt ist es garantiert.)
+</de-DE>
