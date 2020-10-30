@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import needle.Needle;
 import needle.UiRelatedTask;
 
@@ -40,7 +41,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver {
         }
     }
 
-    public void scheduleNextNotification(final Context context) {
+    public static void scheduleNextNotification(final Context context) {
         final AppDatabase database = AppDatabase.getInstance(context);
         Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
             @Override
@@ -56,10 +57,9 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver {
     }
 
     public static void scheduleNextNotification(Context context, List<Birthday> birthdays) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent notifierIntent = new Intent(context, BirthdayNotifier.class);
-
         if (birthdays.isEmpty()) {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent notifierIntent = new Intent(context, BirthdayNotifier.class);
             PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
             alarmManager.cancel(pendingNotifierIntent);
             setAutoSchedulingOnReboot(context, false);
@@ -105,12 +105,7 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver {
             calendar.roll(Calendar.YEAR, 1);
         }
         long triggerTimestamp = calendar.getTimeInMillis();
-        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for epoch time: " + triggerTimestamp);
-
-        notifierIntent.putParcelableArrayListExtra(BirthdayNotifier.EXTRA_BIRTHDAYS, upcomingBirthdays);
-        PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTimestamp, pendingNotifierIntent);
+        scheduleNotification(context, triggerTimestamp, upcomingBirthdays);
 
         setAutoSchedulingOnReboot(context, true);
     }
@@ -136,5 +131,24 @@ public class BirthdayNotificationScheduler extends BroadcastReceiver {
             state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
         }
         packageManager.setComponentEnabledSetting(receiver, state, PackageManager.DONT_KILL_APP);
+    }
+
+    /**
+     * Schedule a notification for a specific time.
+     *
+     * @param context The current context.
+     * @param triggerTimestamp When to trigger the notification, in milliseconds since the Unix Epoch.
+     * @param birthdaysToNotifyAbout The birthdays to mention in the notification.
+     */
+    public static void scheduleNotification(Context context, long triggerTimestamp, @Nullable ArrayList<Birthday> birthdaysToNotifyAbout) {
+        Log.d("BirthdayNotifScheduler", "Scheduling a birthday notification for epoch time: " + triggerTimestamp);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent notifierIntent = new Intent(context, BirthdayNotifier.class);
+
+        notifierIntent.putParcelableArrayListExtra(BirthdayNotifier.EXTRA_BIRTHDAYS, birthdaysToNotifyAbout);
+        PendingIntent pendingNotifierIntent = getPendingNotifierIntent(context, notifierIntent);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTimestamp, pendingNotifierIntent);
     }
 }
