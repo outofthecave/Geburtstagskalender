@@ -5,10 +5,10 @@ Einfach an Geburtstage erinnert werden, ohne persönliche Daten preiszugeben
 Full Description
 
 Nie wieder einen Geburtstag vergessen!
-Diese App erinnert Sie zuverlässig mit einer dezenten Benachrichtigung, wenn jemand Geburtstag hat.
+Diese App erinnert Sie zuverlässig mit einer Benachrichtigung, wenn jemand Geburtstag hat.
 
 Ihre Daten gehören Ihnen selbst!
-Wenn Sie die Geburtstage Ihrer Lieben in diese App eintragen, werden diese direkt auf Ihrem Gerät gespeichert und nicht auf den Servern eines Daten-hungrigen Großkonzerns. Dadurch haben Sie die volle Kontrolle darüber, was mit Ihren Daten passiert. Wenn Sie das nicht einfach glauben wollen (und das sollten Sie auch nicht), können Sie es überprüfen: Vergewissern Sie sich während der Installation, dass Sie dieser App nicht die Berechtigung geben müssen, Ihre Internetverbindung zu nutzen. Dadurch kann die App Ihre Daten nicht übers Internet weitergeben, weil sie die Berechtigung dazu nicht hat.
+Wenn Sie die Geburtstage Ihrer Lieben in diese App eintragen, werden diese direkt auf Ihrem Gerät gespeichert und nicht auf irgendwelchen Servern im Internet. Die App hat nicht mal die Berechtigung, Ihre Internetverbindung zu nutzen. Dadurch haben Sie die volle Kontrolle über Ihre Daten.
 
 Wo ist der Haken?
 Dadurch, dass die Geburtstage nur auf Ihrem Gerät gespeichert werden, gibt es keine automatische Sicherungskopie der Daten für den Fall, dass Sie Ihre Gerät verlieren oder es kaputt geht. Um Datenverlust zu vermeiden, empfehlen wir Ihnen, die Geburtstage zusätzlich an einem anderen Ort zu speichern, indem Sie sie z.B. auf Papier aufschreiben.
@@ -16,7 +16,8 @@ Außerdem müssen Sie die Geburtstage auf jedem Gerät, auf dem Sie diese App nu
 
 Details:
 - An Geburtstage am 29. Februar werden Sie in nicht-Schaltjahren am 1. März erinnert.
-- Die Benachrichtigungen werden um Mitternacht angezeigt und machen kein Geräusch und keine Vibration.
+- Die Benachrichtigungen werden um Mitternacht angezeigt.
+- Sie können die Benachrichtigungsfunktion in den Einstellungen testen.
 
 Diese App ist Open Source Software. Den Quellcode finden Sie unter https://github.com/outofthecave/Geburtstagskalender
 
