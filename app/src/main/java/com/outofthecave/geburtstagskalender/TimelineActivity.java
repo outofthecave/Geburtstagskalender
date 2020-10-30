@@ -95,12 +95,7 @@ public class TimelineActivity extends AppCompatActivity {
             return;
         }
 
-        if (birthdayToReplace != null) {
-            timelineViewModel.delete(birthdayToReplace);
-        }
-        if (birthdayToAdd != null) {
-            timelineViewModel.add(birthdayToAdd);
-        }
+        timelineViewModel.replace(birthdayToReplace, birthdayToAdd);
     }
 
     public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {
