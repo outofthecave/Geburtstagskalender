@@ -1,5 +1,6 @@
 package com.outofthecave.geburtstagskalender.room;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,6 +14,9 @@ import java.util.List;
 
 @Dao
 public interface BirthdayDao {
+    @Query("SELECT * FROM Birthday")
+    LiveData<List<Birthday>> getAllLive();
+
     @Query("SELECT * FROM Birthday")
     List<Birthday> getAll();
 

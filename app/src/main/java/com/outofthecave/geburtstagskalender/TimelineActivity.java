@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -19,6 +22,7 @@ import com.outofthecave.geburtstagskalender.model.YearlyRecurringBirthdayCompara
 import com.outofthecave.geburtstagskalender.room.AppDatabase;
 import com.outofthecave.geburtstagskalender.room.BirthdayDao;
 import com.outofthecave.geburtstagskalender.ui.TimelineRecyclerViewAdapter;
+import com.outofthecave.geburtstagskalender.ui.TimelineViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +33,7 @@ public class TimelineActivity extends AppCompatActivity {
     public static final String EXTRA_BIRTHDAY_TO_REPLACE = "com.outofthecave.geburtstagskalender.BIRTHDAY_TO_REPLACE";
 
     private TimelineRecyclerViewAdapter recyclerViewAdapter;
+    private TimelineViewModel timelineViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +49,16 @@ public class TimelineActivity extends AppCompatActivity {
         // Improve performance because changes in content do not change the layout size of the RecyclerView.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // The list will be filled once we get the data from the database.
         this.recyclerViewAdapter = new TimelineRecyclerViewAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        this.timelineViewModel = ViewModelProviders.of(this).get(TimelineViewModel.class);
+        timelineViewModel.getBirthdays().observe(this, new Observer<List<Birthday>>() {
+            @Override
+            public void onChanged(List<Birthday> birthdays) {
+                onBirthdayListLoaded(context, birthdays);
+            }
+        });
 
         ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -71,25 +82,6 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        final Context context = this;
-        final AppDatabase database = AppDatabase.getInstance(context);
-        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
-            @Override
-            protected List<Birthday> doWork() {
-                return database.birthdayDao().getAll();
-            }
-
-            @Override
-            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
-                onBirthdayListLoaded(context, birthdays);
-            }
-        });
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
@@ -103,26 +95,12 @@ public class TimelineActivity extends AppCompatActivity {
             return;
         }
 
-        final Context context = this;
-        final AppDatabase database = AppDatabase.getInstance(this);
-        Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
-            @Override
-            protected List<Birthday> doWork() {
-                BirthdayDao birthdayDao = database.birthdayDao();
-                if (birthdayToReplace != null) {
-                    birthdayDao.delete(birthdayToReplace);
-                }
-                if (birthdayToAdd != null) {
-                    birthdayDao.add(birthdayToAdd);
-                }
-                return birthdayDao.getAll();
-            }
-
-            @Override
-            protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
-                onBirthdayListLoaded(context, birthdays);
-            }
-        });
+        if (birthdayToReplace != null) {
+            timelineViewModel.delete(birthdayToReplace);
+        }
+        if (birthdayToAdd != null) {
+            timelineViewModel.add(birthdayToAdd);
+        }
     }
 
     public void onBirthdayListLoaded(Context context, List<Birthday> birthdays) {

@@ -96,17 +96,11 @@ public class TimelineRecyclerViewAdapter extends RecyclerView.Adapter<TimelineRe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final AppDatabase database = AppDatabase.getInstance(activity);
-                                Needle.onBackgroundThread().execute(new UiRelatedTask<List<Birthday>>() {
+                                Needle.onBackgroundThread().execute(new Runnable() {
                                     @Override
-                                    protected List<Birthday> doWork() {
+                                    public void run() {
                                         BirthdayDao birthdayDao = database.birthdayDao();
                                         birthdayDao.delete(birthday);
-                                        return birthdayDao.getAll();
-                                    }
-
-                                    @Override
-                                    protected void thenDoUiRelatedWork(List<Birthday> birthdays) {
-                                        activity.onBirthdayListLoaded(activity, birthdays);
                                     }
                                 });
                             }
